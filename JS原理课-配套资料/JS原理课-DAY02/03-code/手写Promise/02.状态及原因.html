@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写Promise</title>
+</head>
+
+<body>
+  <h2>状态及原因</h2>
+  <script>
+    /**
+     * 状态及原因
+     *  1. 添加状态(pending / fulfilled / rejected)
+     *  2. 添加原因
+     *  3. 调整resolve/reject
+     *  4. 状态不可逆
+     * */
+    // 通过变量保存状态,便于后续使用
+    // ctrl+shift+p 转为大写
+    const PENDING = 'pending'
+    const FULFILLED = 'fulfilled'
+    const REJECTED = 'rejected'
+    class HMPromise {
+      // 1. 添加状态
+      state = PENDING
+      // 2. 添加原因
+      result = undefined
+
+      constructor(func) {
+        // 3. 调整resolve/reject
+        // 4. 状态不可逆
+        // 改状态: pending->fulfilled
+        // 记录原因
+        const resolve = (result) => {
+          if (this.state === PENDING) {
+            this.state = FULFILLED
+            this.result = result
+          }
+        }
+        // 改状态: pending->rejected
+        // 记录原因
+        const reject = (result) => {
+          if (this.state === PENDING) {
+            this.state = REJECTED
+            this.result = result
+          }
+        }
+
+        func(resolve, reject)
+      }
+    }
+
+    // ------------- 测试代码 -------------
+    const p = new HMPromise((resolve, reject) => {
+      resolve('success') // pending -> fulfilled
+      reject('error') // pending -> rejected
+    })
+    // p.state // 状态
+    // p.result // 原因
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何指定this的值</title>
+</head>
+
+<body>
+  <h2>如何指定this的值</h2>
+  <script>
+    /**
+     * 如何指定this的值:
+     *  1. 调用时指定this:
+     *  2. 创建时指定this:
+     * */
+
+    // ------------- 1. 调用时指定this: -------------
+    function func(numA, numB) {
+      console.log(this)
+      console.log(numA, numB)
+    }
+    const person = {
+      name: 'itheima'
+    }
+    // 1.1 call:挨个传入参数
+    // func.call(person, 1, 2)
+
+    // 1.2 apply:以数组的方式传入参数
+    // func.apply(person, [3, 4])
+
+    // ------------- 2. 创建时指定this: -------------
+    // 2.1 bind方法
+    // const bindFunc = func.bind(person, 666)
+    // bindFunc(888)
+
+    // 2.2 箭头函数
+    const food = {
+      name: '西兰花炒蛋',
+      eat() {
+        console.log(this)
+        setTimeout(() => {
+          console.log(this)
+        }, 1000);
+        // setTimeout(function () {
+        //   console.log(this)
+        // }, 1000)
+      }
+    }
+    food.eat()
+
+  </script>
+</body>
+
+</html>

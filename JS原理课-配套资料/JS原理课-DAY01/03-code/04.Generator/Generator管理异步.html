@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator管理异步</title>
+</head>
+
+<body>
+  <h2>Generator管理异步</h2>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.3.6/axios.js"></script>
+  <script>
+    function* cityGenerator() {
+      yield axios('http://hmajax.itheima.net/api/city?pname=北京')
+      yield axios('http://hmajax.itheima.net/api/city?pname=广东省')
+    }
+
+
+    // 获取 Generator对象
+    const city = cityGenerator()
+
+    // 通过next方法执行代码,并获取结果
+    city.next().value.then(res => {
+      console.log('res:', res)
+      return city.next().value
+    }).then(res => {
+      console.log('res:', res)
+    })
+
+
+  </script>
+</body>
+
+</html>

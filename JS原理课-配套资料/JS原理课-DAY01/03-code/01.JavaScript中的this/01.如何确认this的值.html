@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何确认this的值</title>
+</head>
+
+<body>
+  <h2>如何确认this的值</h2>
+  <script>
+    /**
+     * 如何确认this的值
+      * 1.全局执行环境
+      *   严格模式，非严格模式:全局对象（window）
+      * 2.函数内部
+      *  2.1 直接调用
+      *   严格模式下:undefined
+      *   非严格模式:全局对象（window）
+      *  2.2 对象方法调用
+      *   严格模式，非严格模式:调用者
+      * 3.开启严格模式
+      *   脚本开启: 'use strict'
+      *   函数内部开启:'use strict'
+      *   注意:'use strict'写在代码顶端
+     * */
+
+    // ------------- 1.全局执行环境 -------------
+    //  严格模式，非严格模式 全局对象（window）
+    // 'use strict'
+    // console.log(this)
+
+    // ------------- 2.函数内部 -------------
+    // 2.1 直接调用-非严格模式
+    // function func() {
+    //   console.log(this) // window
+    // }
+    // func()
+    // 2.1 直接调用-严格模式
+    // function func() {
+    //   'use strict'
+    //   console.log(this) // undefined
+    // }
+    // func()
+
+    // 2.2 对象方法调用
+    const food = {
+      name: '猪脚饭',
+      eat() {
+        'use strict'
+        console.log(this)
+      }
+    }
+    // 非严格模式，严格模式
+    food.eat() // 调用者
+
+  </script>
+</body>
+
+</html>

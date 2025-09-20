@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设计模式</title>
+</head>
+
+<body>
+  <h2>代理模式</h2>
+  <input type="text" class="query" placeholder="请输入查询的省份">
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.3.6/axios.min.js"></script>
+  <script>
+
+    /**
+     * 缓存代理
+     *  1. 创建对象缓存数据
+     *  2. 判断是否缓存数据
+     *    2.1 没有:查询,缓存,并返回
+     *    2.2 有:直接返回
+     * */
+
+    //  1. 创建对象缓存数据
+    const cache = {}
+    async function searchCity(pname) {
+      // 2. 判断是否缓存数据
+      if (!cache[pname]) {
+        // 2.1 没有:查询,缓存,并返回
+        const res = await axios({
+          url: 'http://hmajax.itheima.net/api/city',
+          params: {
+            pname
+          }
+        })
+        cache[pname] = res.data.list
+      }
+      // 2.2 有:直接返回
+      return cache[pname]
+    }
+
+    document.querySelector('.query').addEventListener('keyup', async function (e) {
+      if (e.keyCode === 13) {
+        const city = await searchCity(this.value)
+        console.log(city)
+      }
+    })
+  </script>
+</body>
+
+</html>

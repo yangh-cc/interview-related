@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写Promise</title>
+</head>
+
+<body>
+  <h2>构造函数</h2>
+  <script>
+    /**
+     * 构造函数
+     *  1. 定义类
+     *  2. 添加构造函数
+     *  3. 定义resolve/reject
+     *  4. 执行回调函数
+     * */
+    // 1. 定义类
+    class HMPromise {
+      // 2. 添加构造函数
+      constructor(func) {
+
+        // 3. 定义resolve/reject
+        const resolve = (result) => {
+          console.log('resolve-执行啦:', result)
+        }
+        const reject = (result) => {
+          console.log('reject-执行啦:', result)
+        }
+
+        // 4. 执行回调函数
+        func(resolve, reject)
+      }
+    }
+
+
+
+
+
+
+    // ------------- 测试代码 -------------
+    const p = new HMPromise((resolve, reject) => {
+      console.log('执行啦!')
+      // resolve('success')
+      reject('error')
+    })
+  </script>
+</body>
+
+</html>

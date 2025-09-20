@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写Promise</title>
+</head>
+
+<body>
+  <h2>then方法-成功和失败回调</h2>
+  <script>
+    /**
+     * 成功和失败回调
+     *  1. 添加实例方法
+     *  2. 参数判断(参考文档)
+     *    2.1 执行成功回调
+     *    2.2 执行失败回调
+     * */
+    const PENDING = 'pending'
+    const FULFILLED = 'fulfilled'
+    const REJECTED = 'rejected'
+    class HMPromise {
+      // 状态
+      state = PENDING
+      // 原因
+      result = undefined
+
+      // 构造函数
+      constructor(func) {
+        // pending->fulfilled
+        const resolve = (result) => {
+          if (this.state === PENDING) {
+            this.state = FULFILLED
+            this.result = result
+          }
+        }
+        // pending->rejected
+        const reject = (result) => {
+          if (this.state === PENDING) {
+            this.state = REJECTED
+            this.result = result
+          }
+        }
+        func(resolve, reject)
+      }
+
+      // 1. 添加实例方法
+      then(onFulfilled, onRejected) {
+        // 2. 参数判断(参考文档)
+        onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : x => x
+        onRejected = typeof onRejected === 'function' ? onRejected : x => { throw x }
+
+        // 2.1 执行成功回调
+        // 2.2 执行失败回调
+        if (this.state === FULFILLED) {
+          onFulfilled(this.result)
+        } else if (this.state === REJECTED) {
+          onRejected(this.result)
+        }
+      }
+    }
+
+    // ------------- 测试代码 -------------
+    const p = new HMPromise((resolve, reject) => {
+      // resolve('success')
+      reject('error1234')
+    })
+
+    // p.then(res => {
+    //   console.log('成功回调:', res)
+    // }, err => {
+    //   console.log('失败回调:', err)
+    // })
+    p.then(res => {
+      console.log('成功回调:', res)
+    })
+
+  </script>
+</body>
+
+</html>

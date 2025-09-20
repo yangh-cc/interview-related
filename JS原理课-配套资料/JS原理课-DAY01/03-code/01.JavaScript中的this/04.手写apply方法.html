@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写apply方法</title>
+</head>
+
+<body>
+  <h2>手写apply方法</h2>
+  <script>
+    /**
+     * 手写apply方法
+     *  1. 定义myApply方法
+     *  2. 设置this并调用原函数
+     *  3. 接收参数并返回结果
+     * */
+    // 1. 定义myApply方法
+    // 3. 接收参数并返回结果
+    Function.prototype.myApply = function (thisArg, args) {
+      // console.log('myApply执行啦')
+      // 2. 设置this并调用原函数
+      const key = Symbol('key')
+      thisArg[key] = this
+      const res = thisArg[key](...args)
+      delete thisArg[key]
+
+      return res
+    }
+
+
+
+    // ------------- 测试代码 -------------
+    const person = {
+      name: 'itheima'
+    }
+
+    function func(numA, numB) {
+      console.log(this)
+      console.log(numA, numB)
+      return numA + numB
+    }
+
+    const res = func.myApply(person, [2, 8])
+    console.log('返回值为:', res)
+
+
+
+
+
+  </script>
+</body>
+
+</html>

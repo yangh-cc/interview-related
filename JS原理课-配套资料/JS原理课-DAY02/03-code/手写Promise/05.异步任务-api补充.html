@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写Promise</title>
+</head>
+
+<body>
+  <h2>异步任务-api补充</h2>
+  <script>
+    const PENDING = 'pending'
+    const FULFILLED = 'fulfilled'
+    const REJECTED = 'rejected'
+    class HMPromise {
+      // 状态
+      state = PENDING
+      // 原因
+      result = undefined
+      // 1. 定义实例属性
+      #handlers = [] // [{onFulfilled,onRejected}...]
+
+      // 构造函数
+      constructor(func) {
+        // pending->fulfilled
+        const resolve = (result) => {
+          if (this.state === PENDING) {
+            this.state = FULFILLED
+            this.result = result
+            // 3. 调用成功回调
+            this.#handlers.forEach(({ onFulfilled }) => {
+              onFulfilled(this.result)
+            })
+          }
+        }
+        // pending->rejected
+        const reject = (result) => {
+          if (this.state === PENDING) {
+            this.state = REJECTED
+            this.result = result
+            // 4. 调用失败回调
+            this.#handlers.forEach(({ onRejected }) => {
+              onRejected(this.result)
+            })
+          }
+        }
+        func(resolve, reject)
+      }
+
+      // then方法
+      then(onFulfilled, onRejected) {
+        onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : x => x
+        onRejected = typeof onRejected === 'function' ? onRejected : x => { throw x }
+
+        if (this.state === FULFILLED) {
+          onFulfilled(this.result)
+        } else if (this.state === REJECTED) {
+          onRejected(this.result)
+        } else if (this.state === PENDING) {
+          // 2. 保存回调函数
+          this.#handlers.push({
+            onFulfilled, onRejected
+          })
+        }
+      }
+    }
+
+    // ------------- 测试代码 -------------
+    // console.log('top')
+    // const p = new HMPromise((resolve, reject) => {
+    //   resolve('success')
+    // })
+    // p.then(res => {
+    //   console.log(res)
+    // })
+    // console.log('bottom')
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 异步任务:
+     *  Vue2:Promise.then,MutationObserver,setImmediate,setTimeout
+     *  我们选用:queueMicrotask MutationObserver setTimeout
+     *    Promise.then:手写Promise,不考虑这个
+     *    queueMicrotask:node11,新式浏览器(不包括ie11)
+     *    MutationObserver: node不支持,ie11支持
+     *    setImmediate:ie10,11支持,edge:12-18支持(不考虑)
+     *    setTimeout:node,浏览器全支持
+     * */
+
+    // ------------- 异步任务1 queueMicrotask  -------------
+    // console.log('1')
+    // queueMicrotask(() => {
+    //   console.log('queueMicrotask')
+    // })
+    // console.log('2')
+
+
+    // ------------- 异步任务2 MutationObserver -------------
+    console.log('1')
+    // 1. 创建观察器,并传入回调函数
+    const obs = new MutationObserver(() => {
+      console.log('MutationObserver')
+    })
+    // 2. 创建元素,并添加监听
+    const divNode = document.createElement('div')
+    // 参数1 观察的dom节点
+    // 参数2 观察的选项(childList 观察子节点改变)
+    obs.observe(divNode, { childList: true })
+    // 3. 修改元素内容
+    divNode.innerText = 'itheima 666'
+    console.log('2')
+
+
+
+    // ------------- 异步任务3 setTimeout -------------
+    // chrome,node 
+
+
+
+  </script>
+</body>
+
+</html>

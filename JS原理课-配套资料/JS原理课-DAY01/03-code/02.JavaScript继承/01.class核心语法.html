@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>class核心语法</title>
+</head>
+
+<body>
+  <h2>class核心语法</h2>
+  <script>
+    // 定义类
+    class Person {
+      // 公有属性(推荐定义在这里)
+      name
+      // 定义属性并设置默认值
+      age = 18
+
+      // 构造函数
+      constructor(name) {
+        // 构造函数内部的this 实例化对象
+        this.name = name
+
+        // 动态添加属性(不推荐)
+        this.foods = ['西兰花炒蛋', '花菜炒蛋']
+      }
+
+      // 公有方法
+      sayHi() {
+        console.log('你好呀')
+        console.log(this.name)
+      }
+
+      sayHello() {
+        console.log('hello itheima')
+        console.log(this.foods)
+      }
+    }
+
+    // 基于类 实例化对象
+    const p = new Person('itheima')
+  </script>
+</body>
+
+</html>

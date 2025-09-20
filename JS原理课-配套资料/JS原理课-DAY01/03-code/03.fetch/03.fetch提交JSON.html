@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>fetch提交JSON</title>
+</head>
+
+<body>
+  <h2>fetch提交JSON</h2>
+  <button class="btn">提交JSON</button>
+  <script>
+    document.querySelector('.btn').addEventListener('click', async () => {
+      // 实例化Headers对象
+      const headers = new Headers()
+      // append 添加keyvalue
+      headers.append('content-type', 'application/json')
+
+      const res = await fetch('http://hmajax.itheima.net/api/register', {
+        method: 'post',
+        headers,
+        // JSON.stringify 对象-->JSON
+        body: JSON.stringify({
+          username: 'itheima666',
+          password: '123456'
+        })
+      })
+      // res.status 判断状态码
+      const data = await res.json()
+      console.log(data)
+    })
+  </script>
+</body>
+
+</html>

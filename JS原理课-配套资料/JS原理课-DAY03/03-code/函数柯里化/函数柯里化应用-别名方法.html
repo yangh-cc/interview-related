@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>函数柯里化应用-类型判断</title>
+</head>
+
+<body>
+  <h2>函数柯里化应用-类型判断</h2>
+  <script>
+    // 有如下4个函数
+    // function isUndefined(thing) {
+    //   return typeof thing === 'undefined'
+    // }
+    // function isNumber(thing) {
+    //   return typeof thing === 'number'
+    // }
+    // function isString(thing) {
+    //   return typeof thing === 'string'
+    // }
+    // function isFunction(thing) {
+    //   return typeof thing === 'function'
+    // }
+
+    // ------------- 核心代码 -------------
+    // 改为通过 typeOfTest 生成:
+    // 2. 动态传入判断的类型
+    // const typeOfTest = function (type) {
+    //   // 1. 复用 类型判断函数的逻辑
+    //   function isUndefined(thing) {
+    //     return typeof thing === type
+    //   }
+    //   return isUndefined
+    // }
+    const typeOfTest = type => thing => typeof thing === type
+
+
+
+
+    // typeOfTest动态的生成类型判断函数,需要用哪个,动态生成即可
+    const isString = typeOfTest('string')
+    const isUndefined = typeOfTest('undefined')
+    const isFunction = typeOfTest('function')
+
+
+
+  </script>
+</body>
+
+</html>

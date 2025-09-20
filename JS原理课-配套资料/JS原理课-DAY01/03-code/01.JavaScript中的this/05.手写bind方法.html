@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写bind方法</title>
+</head>
+
+<body>
+  <h2>手写bind方法</h2>
+  <script>
+    /**
+     * 手写bind方法
+     *  1. 定义myBind方法
+     *  2. 返回绑定this的新函数
+     *  3. 合并绑定和新传入的参数
+     * */
+    //  1. 定义myBind方法
+    Function.prototype.myBind = function (thisArg, ...args) {
+      // console.log('myBind调用了')
+      // 2. 返回绑定this的新函数
+      return (...reArgs) => {
+        // this:原函数(原函数.myBind)
+        return this.call(thisArg, ...args, ...reArgs)
+      }
+    }
+
+
+    // ------------- 测试代码 -------------
+    const person = {
+      name: 'itheima'
+    }
+
+    function func(numA, numB, numC, numD) {
+      console.log(this)
+      console.log(numA, numB, numC, numD)
+      return numA + numB + numC + numD
+    }
+
+    const bindFunc = func.myBind(person, 1, 2)
+
+    const res = bindFunc(3, 4)
+    console.log('返回值:', res)
+
+
+
+
+
+  </script>
+</body>
+
+</html>

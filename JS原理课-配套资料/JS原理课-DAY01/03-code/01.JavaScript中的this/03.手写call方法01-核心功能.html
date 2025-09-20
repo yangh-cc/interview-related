@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写call方法</title>
+</head>
+
+<body>
+  <h2>手写call方法</h2>
+  <script>
+    /**
+     * 手写call方法
+     *  1. 定义myCall方法
+     *  2. 设置this并调用原函数
+     *  3. 接收剩余参数并返回结果
+     * */
+    // 1. 定义myCall方法
+    // 3. 接收剩余参数并返回结果
+    Function.prototype.myCall = function (thisArg, ...args) {
+      // console.log('myCall执行啦')
+      // 2. 设置this并调用原函数
+      // thisArg 传入的设置为this的对象
+      // this 原函数(原函数.myCall)
+      // console.log(args)
+      thisArg.f = this
+      const res = thisArg.f(...args)
+      delete thisArg.f
+      return res
+    }
+
+
+    // ------------- 测试代码 -------------
+    // const person = {
+    //   name: 'itheima'
+    // }
+    // function func(numA, numB) {
+    //   console.log(this)
+    //   console.log(numA, numB)
+    //   return numA + numB
+    // }
+    // // const res = func.myCall(person, 2, 8)
+    // const res = func.myCall(person, 6, 4)
+    // console.log('返回值为:', res)
+
+
+    const food = {
+      name: '西兰花炒蛋'
+    }
+    function func2(numA, numB, numC) {
+      console.log(this)
+      console.log(numA, numB, numC)
+      return numA + numB + numC
+    }
+    const res2 = func2.myCall(food, 2, 4, 6)
+    console.log('res2:', res2)
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写call方法</title>
+</head>
+
+<body>
+  <h2>手写call方法</h2>
+  <script>
+    /**
+     * 手写call方法
+     *  1. 定义myCall方法
+     *  2. 设置this并调用原函数
+     *  3. 接收剩余参数并返回结果
+     *  4. 使用Symbol调优
+     * */
+    // 1. 定义myCall方法
+    // 3. 接收剩余参数并返回结果
+    Function.prototype.myCall = function (thisArg, ...args) {
+      // 2. 设置this并调用原函数
+      // 给thisArg加一个一定和原属性不重名的新属性（方法）
+      // 4. 使用Symbol调优
+      const key = Symbol('key')
+      // thisArg.key
+      thisArg[key] = this
+      const res = thisArg[key](...args)
+      delete thisArg[key]
+      return res
+    }
+
+
+    // ------------- 测试代码 -------------
+    const food = {
+      name: '西兰花炒蛋'
+    }
+    function func2(numA, numB, numC) {
+      console.log(this)
+      console.log(numA, numB, numC)
+      return numA + numB + numC
+    }
+    const res2 = func2.myCall(food, 2, 4, 6)
+    console.log('res2:', res2)
+
+    // ------------- 测试Symbol -------------
+    // 调用Symbol内置函数，可以传入字符串作为标记
+    // 返回一个唯一的值
+    // const s1 = Symbol()
+    // const s2 = Symbol()
+    // console.log(s1 === s2)
+    // const s3 = Symbol('itheima')
+    // const s4 = Symbol('itheima')
+    // console.log(s3 === s4)
+
+
+
+  </script>
+</body>
+
+</html>

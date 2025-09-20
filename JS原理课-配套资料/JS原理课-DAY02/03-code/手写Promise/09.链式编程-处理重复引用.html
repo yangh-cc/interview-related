@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写Promise</title>
+</head>
+
+<body>
+  <h2>链式编程-处理重复引用</h2>
+  <script>
+    // 执行异步任务
+    function runAsynctask(callback) {
+      if (typeof queueMicrotask === 'function') {
+        queueMicrotask(callback)
+      } else if (typeof MutationObserver === 'function') {
+        const obs = new MutationObserver(callback)
+        const divNode = document.createElement('div')
+        obs.observe(divNode, { childList: true })
+        divNode.innerText = 'itheima666'
+      } else {
+        setTimeout(callback, 0)
+      }
+    }
+
+    /**
+     * 链式编程-处理Promise(fulfilled状态)
+    */
+    const PENDING = 'pending'
+    const FULFILLED = 'fulfilled'
+    const REJECTED = 'rejected'
+    class HMPromise {
+      // 状态
+      state = PENDING
+      // 原因
+      result = undefined
+      // 回调函数数组
+      #handlers = [] // [{onFulfilled,onRejected}...]
+
+      // 构造函数
+      constructor(func) {
+        // pending->fulfilled
+        const resolve = (result) => {
+          if (this.state === PENDING) {
+            this.state = FULFILLED
+            this.result = result
+            this.#handlers.forEach(({ onFulfilled }) => {
+              onFulfilled(this.result)
+            })
+          }
+        }
+        // pending->rejected
+        const reject = (result) => {
+          if (this.state === PENDING) {
+            this.state = REJECTED
+            this.result = result
+            this.#handlers.forEach(({ onRejected }) => {
+              onRejected(this.result)
+            })
+          }
+        }
+        func(resolve, reject)
+      }
+
+      // then方法
+      then(onFulfilled, onRejected) {
+        onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : x => x
+        onRejected = typeof onRejected === 'function' ? onRejected : x => { throw x }
+
+        const p2 = new HMPromise((resolve, reject) => {
+          if (this.state === FULFILLED) {
+            runAsynctask(() => {
+              try {
+                const x = onFulfilled(this.result)
+                // 1. 处理重复引用
+                if (x === p2) {
+                  // console.log('返回了p2')
+                  // 2. 抛出错误 Chaining cycle detected for promise #<Promise>
+                  throw new TypeError('Chaining cycle detected for promise #<Promise>')
+                }
+                if (x instanceof HMPromise) {
+                  x.then(res => resolve(res), err => reject(err))
+                } else {
+                  resolve(x)
+                }
+              } catch (error) {
+                reject(error)
+              }
+            })
+          }
+          else if (this.state === REJECTED) {
+            runAsynctask(() => {
+              onRejected(this.result)
+            })
+          }
+          else if (this.state === PENDING) {
+            this.#handlers.push({
+              onFulfilled: () => {
+                runAsynctask(() => {
+                  onFulfilled(this.result)
+                })
+              }, onRejected: () => {
+                runAsynctask(() => {
+                  onRejected(this.result)
+                })
+              }
+            })
+          }
+        })
+        return p2
+      }
+    }
+
+    // ------------- 测试代码 手写Promise  -------------
+    const p = new HMPromise((resolve, reject) => {
+      resolve(1)
+    })
+    const p2 = p.then(res => {
+      return p2
+    })
+
+    p2.then(
+      res => { },
+      err => { console.log('err:', err) }
+    )
+
+
+
+    // ------------- 测试代码 原生Promise  -------------
+    // const p = new Promise((resolve, reject) => {
+    //   resolve(1)
+    // })
+    // const p2 = p.then(res => {
+    //   return p2
+    // })
+
+    // p2.then(
+    //   res => { },
+    //   err => { console.log('err:', err) }
+    // )
+
+
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>

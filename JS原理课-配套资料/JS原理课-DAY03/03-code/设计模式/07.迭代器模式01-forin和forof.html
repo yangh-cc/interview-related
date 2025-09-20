@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设计模式</title>
+</head>
+
+<body>
+  <h2>迭代器模式</h2>
+  <script>
+    // ------------- for in 和 for of -------------
+    Object.prototype.objFunc = function () { }
+    Array.prototype.arrFunc = function () { }
+
+    const foods = ['西兰花', '花菜', '西葫芦']
+
+    /**
+     * for in语句可以遍历一个对象的除[Symbol]以外的[可枚举]属性，包括继承的可枚举属性。
+     *  1. 遍历的是索引
+     *  2. 继承而来的也可以遍历出来(原型链上动态增加的也可以遍历)
+     * */
+    // for (const key in foods) {
+    //   console.log('key:', key)
+    // }
+
+
+
+    /**
+     * for of语句可以遍历 可迭代对象
+     * 包括 Array，Map，Set，String，TypedArray，arguments 对象等等
+     * 1. 遍历的是值
+     * 2. 继承而来的无法遍历
+     * */
+    // for (const iterator of foods) {
+    //   console.log('iterator:', iterator)
+    // }
+
+    const obj = {
+      name: '西兰花炒蛋'
+    }
+    // for (const iterator of obj) {
+
+    // }
+    for (const key in obj) {
+      console.log('key:', key)
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设计模式</title>
+</head>
+
+<body>
+  <h2>工厂模式</h2>
+  <script>
+    // ------------- 工厂模式 -------------
+    // 工厂模式
+    function FoodFactory(name, color) {
+      return {
+        name,
+        color
+      }
+    }
+    const f1 = FoodFactory('西兰花', '黄绿色')
+
+
+    // ------------- 构造函数 -------------
+    // 构造函数
+    function Food(name, color) {
+      this.name = name
+      this.color = color
+    }
+    const f3 = new Food('西兰花', '黄绿色')
+  </script>
+</body>
+
+</html>

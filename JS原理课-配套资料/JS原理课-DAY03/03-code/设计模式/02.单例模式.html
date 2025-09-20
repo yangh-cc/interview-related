@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设计模式</title>
+</head>
+
+<body>
+  <h2>单例模式</h2>
+  <script>
+    /**
+     * 实现单例方法:
+     *  1. 定义类
+     *  2. 添加私有属性
+     *  3. 添加静态方法
+     *  4. 判断并返回对象
+     * */
+    //  1. 定义类
+    class SingleTon {
+      // 2. 添加私有属性(staic)
+      static #instance
+
+      // 3. 添加静态方法
+      static getInstance() {
+        // 4. 判断并返回对象
+        if (this.#instance === undefined) {
+          this.#instance = new SingleTon()
+        }
+        return this.#instance
+      }
+    }
+
+
+    // ------------- 测试代码 -------------
+    const s1 = SingleTon.getInstance()
+    const s2 = SingleTon.getInstance()
+    console.log(s1 === s2)//true
+  </script>
+</body>
+
+</html>
