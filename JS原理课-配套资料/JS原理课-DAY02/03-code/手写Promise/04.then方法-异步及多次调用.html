@@ -75,10 +75,9 @@
 
     // ------------- 测试代码 -------------
     const p = new HMPromise((resolve, reject) => {
-      setTimeout(() => {
+     
         resolve('success')
         // reject('error')
-      }, 2000);
     })
 
     p.then(res => {

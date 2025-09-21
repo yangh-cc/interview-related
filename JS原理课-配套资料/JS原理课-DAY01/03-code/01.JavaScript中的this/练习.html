@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        function func(a, b) {
+            console.log(this);
+            console.log(a, b)
+        }
+
+        const per = {
+            name: 'yh'
+        }
+        //调用时指定函数 call / apply 
+        // func.call(per,1,2)
+        // func.apply(per, [3, 4])
+
+        //bind方法，返回一个新的函数，绑定时传入参数，调用时可以省略
+        // const bindFunc = func.bind(per,888,999)
+        // bindFunc()
+
+        //箭头函数,向上一级作用域找
+        const hobby = {
+            name: 'football',
+            play() {
+                console.log(this)
+                setTimeout(() => {
+                    console.log(this)
+
+                }, 1000)
+            }
+        }
+        hobby.play()
+
+
+        Function.prototype.myApply = function (_this, args) {
+            const key = Symbol('key')
+            _this[key] = this
+            const res = _this[key](...args)
+            delete _this[key]
+            return res
+        }
+        function func1(a, b) {
+            console.log(this);
+
+            return a + b
+
+        }
+        const food = {
+            name: '黄瓜'
+        }
+        func1.myApply(food, [1, 2])
+
+
+        const func2 = func1.myBind(food, 111, 222)
+        func2()
+
+        Function.prototype.myBind = function (_this, ...args) {
+
+            const key = Symbol('key')
+            _this[key] = this
+
+            function deleteKey() {
+                const res = _this[key](...args)
+                delete _this[key]
+                return res
+            }
+            return deleteKey
+        }
+
+    </script>
+</body>
+
+</html>

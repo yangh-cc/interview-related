@@ -19,23 +19,38 @@
      *  1.如何设置请求方法?
      *  2.如何提交数据?
      * */
-    document.querySelector('.ipt').addEventListener('change', async function () {
+    // document.querySelector('.ipt').addEventListener('change', async function () {
+    //   const img = this.files[0]
+    //   const data = new FormData()
+    //   data.append('img', img)
+    //   // console.log(img)
+    //   // 1.如何设置请求方法?
+    //   // 2.如何提交数据?
+    //   const res = await fetch('http://hmajax.itheima.net/api/uploadimg', {
+    //     // 请求方法
+    //     method: 'post',
+    //     // 提交的数据
+    //     body: data
+    //   })
+    //   const resData = await res.json()
+    //   console.log(resData)
+
+    //   // 回显
+    //   document.querySelector('.icon').src = resData.data.url
+    // })
+
+    document.querySelector('.ipt').addEventListener('change',async function() {
       const img = this.files[0]
       const data = new FormData()
-      data.append('img', img)
-      // console.log(img)
-      // 1.如何设置请求方法?
-      // 2.如何提交数据?
-      const res = await fetch('http://hmajax.itheima.net/api/uploadimg', {
-        // 请求方法
-        method: 'post',
-        // 提交的数据
-        body: data
+      data.append('img',img)
+      const res = await fetch('http://hmajax.itheima.net/api/uploadimg',{
+        //请求方法
+        method:'post',
+        body: data 
       })
       const resData = await res.json()
-      console.log(resData)
 
-      // 回显
+      //回显
       document.querySelector('.icon').src = resData.data.url
     })
   </script>

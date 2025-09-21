@@ -24,6 +24,7 @@
       // 给thisArg加一个一定和原属性不重名的新属性（方法）
       // 4. 使用Symbol调优
       const key = Symbol('key')
+
       // thisArg.key
       thisArg[key] = this
       const res = thisArg[key](...args)
