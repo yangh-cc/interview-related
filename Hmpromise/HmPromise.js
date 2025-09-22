@@ -57,7 +57,6 @@ class HmPromise {
         }
     }
     then(onFulfilled, onRejected) {
-        //参数判断
         onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : x => x
         onRejected = typeof onRejected === 'function' ? onRejected : x => { throw x }
 
@@ -116,9 +115,7 @@ class HmPromise {
         return this.then(onFinally,onFinally)
     } 
 
-    //静态方法
     static resolve(value){
-        //判断传值 
         if(value instanceof HmPromise){
             return value
         }
@@ -145,16 +142,13 @@ class HmPromise {
         })
     }   
 
-    //all
     static all(promises){
         return new HmPromise((resolve,reject)=>{
             if(!Array.isArray(promises)){
                 return reject(new TypeError('argument is not iterable'))
             }
 
-            //空数组直接兑现
             promises.length === 0 && resolve(promises)
-            //记录结果
         const results=[]
         let count =0
         promises.forEach((p,index)=>{
@@ -199,7 +193,6 @@ class HmPromise {
     }
 
     static any(promises){
-        //返回promise，数组判断
         return new HmPromise((resolove,reject)=>{
             if(!Array.isArray(promises)){
                 return reject(new TypeError('All promises were rejected'))
@@ -224,81 +217,16 @@ class HmPromise {
     }
 }
 
-//All promises were rejected 
-const p1 = new HmPromise((resolve,reject)=>{
-    // resolve(1)
-    reject(1)
-})    
-
-const  p2 = new HmPromise((resolve,reject)=>{
-    setTimeout(()=>{
-        reject(2)
-    },2000)
-})  
-const p3 = HmPromise.reject(3)
-HmPromise.any([p1,p2,p3]).then(res=>{
-    console.log('res:',res);
-    
-},err=>{
-    console.dir(err);
-    
-})
-
-
-// HmPromise.race([p1,p2]).then((res)=>{
-//     console.log('res:',res);
-    
-// },err=>{
-//     console.log('err:',err)
-// })
-
-// HmPromise.resolve(new HmPromise((resolve,reject)=>{
-//     // resolve('resolve')
-//     // reject('reject')
-//     throw 'error'
-// })).then(res => {
-//     console.log('res',res);
-    
-// }, err =>{
-//     console.log('err',err);
-    
-// })
-
-// HmPromise.resolve('itheima').then(res=>{
-//     console.log(res);
-    
-// })
-
-// const p = new HmPromise((resolve, reject) => {
-
-//     resolve('success111')
-//     // throw 'throw-error'
-// })
-// p.then((res) => {
-//     console.log(res);
-// }).catch((err) => {
-//     console.log(err);
-// }).finally(()=>{
-//     console.log('finally');
-    
-// })
-// p.then(res => {
-
-//     return new HmPromise((resolve, reject) => {
-//         resolve("khjgkgf")
-//     })
-// }, err => {
-
-//     console.log('回调失败', err);
-
-// }
-// ).then((result) => {
-//     console.log(result);
-
-// }, (err) => {
-//     console.log(err);
-
-// })
+module.exports = {
+    deferred(){
+        const res = {}
+        res.promise = new HmPromise((resolve,reject)=>{
+            res.resolove = resolve
+            res.reject = reject
+        })
+        return res
+    }
+}
 
 
 
