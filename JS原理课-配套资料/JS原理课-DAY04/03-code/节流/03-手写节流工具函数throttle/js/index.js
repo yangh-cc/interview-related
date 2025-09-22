@@ -20,19 +20,17 @@ const func = function (e) {
 }
 
 function throttle(func, wait = 0) {
-  let timeId
-  return function (...args) {
-    if (timeId !== undefined) {
-      return
-    }
-    // console.log(this)
-    // console.log(args)
-    const _this = this
-    timeId = setTimeout(() => {
-      func.apply(_this, args)
-      timeId = undefined
-    }, wait)
+ let timeId
+ return function(...args){
+  if(timeId!== undefined){
+    return
   }
+  const _this=this
+  timeId=setTimeout(()=>{
+    func.apply(_this,args)
+    timeId=undefined
+  },wait)
+ }
 }
 
 const throttleFn = throttle(func, 1000)
@@ -69,3 +67,16 @@ function throttle(func, wait = 0) {
 }
 
 
+//  let timeId
+//   return function (...args) {
+//     if (timeId !== undefined) {
+//       return
+//     }
+//     // console.log(this)
+//     // console.log(args)
+//     const _this = this
+//     timeId = setTimeout(() => {
+//       func.apply(_this, args)
+//       timeId = undefined
+//     }, wait)
+//   }
