@@ -197,13 +197,37 @@ class HmPromise {
 
        
     }
+
+    static any(promises){
+        //返回promise，数组判断
+        return new HmPromise((resolove,reject)=>{
+            if(!Array.isArray(promises)){
+                return reject(new TypeError('All promises were rejected'))
+            }
+
+            promises.length === 0 && reject(new AggregateError(promises,'All promises were rejected'))
+
+            const errors =[]
+            let count = 0
+            promises.forEach((p,index)=>{
+            HmPromise.resolve(p).then(res=>{
+                resolove(res)
+            },err=>{
+                errors[index]=err
+                count++
+                count === promises.length && reject(new AggregateError(errors,'All promises were rejected'))
+            })
+        })
+        })
+
+        
+    }
 }
 
-
+//All promises were rejected 
 const p1 = new HmPromise((resolve,reject)=>{
-    setTimeout(()=>{
-        resolve(1)
-    },1000)
+    // resolve(1)
+    reject(1)
 })    
 
 const  p2 = new HmPromise((resolve,reject)=>{
@@ -211,12 +235,12 @@ const  p2 = new HmPromise((resolve,reject)=>{
         reject(2)
     },2000)
 })  
-const p3 = 3
-HmPromise.allSettled([p1,p2,p3]).then(res=>{
+const p3 = HmPromise.reject(3)
+HmPromise.any([p1,p2,p3]).then(res=>{
     console.log('res:',res);
     
 },err=>{
-    console.log('err:',err);
+    console.dir(err);
     
 })
 
